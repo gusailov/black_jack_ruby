@@ -1,7 +1,7 @@
 require_relative './modules/modules'
 require_relative 'game'
 require_relative 'card'
-# require_relative 'train'
+require_relative 'player'
 # require_relative 'cargo_train'
 # require_relative 'passenger_train'
 # require_relative 'passenger_wagon'

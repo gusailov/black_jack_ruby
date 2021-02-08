@@ -1,5 +1,5 @@
 class Game
-  attr_reader :cards_deck
+  attr_reader :cards_deck, :player
 
   def initialize
     @cards_deck = []
@@ -14,5 +14,11 @@ class Game
       ranked_cards.each { |i| @cards_deck << Card.new(suit, i, 10) }
       @cards_deck << Card.new(suit, 'A', 1)
     end
+  end
+
+  def run
+    puts 'Enter Your Name'
+    name = gets.chomp
+    @player = Player.new(name)
   end
 end
