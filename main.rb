@@ -1,6 +1,6 @@
 require_relative './modules/modules'
-# require_relative 'station'
-# require_relative 'route'
+require_relative 'game'
+require_relative 'card'
 # require_relative 'train'
 # require_relative 'cargo_train'
 # require_relative 'passenger_train'
