@@ -1,17 +1,21 @@
 class Game
-  attr_reader :cards_deck, :player, :dealer
+  attr_reader :cards_deck, :player, :dealer, :bank
 
   def initialize
     @cards_deck = []
     cards_deck_create
     @dealer = Player.new('Dealer')
+    @bank = 0
   end
 
   def run
+    bet = 10
     player_name
     @player.take_cards(cards_deck.pop(2))
-    @player.show_players_cards
-
+    @player.show_player_cards
+    @player.bet(bet)
+    puts @player.wallet
+    @bank += bet
     # @dealer.players_cards <<
   end
 
