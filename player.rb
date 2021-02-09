@@ -12,9 +12,15 @@ class Player
   end
 
   def show_player_cards
-    puts "Cards of #{name} : "
-    @players_cards.each { |card| print card.name, '| ' }
-    nil
+    card_names = []
+    @players_cards.each do |card|
+      card_names << card.name.to_s
+    end
+    card_names.join('|')
+  end
+
+  def player_info
+    puts "Player: #{name}, cards: |#{show_player_cards}|, wallet: #{wallet} "
   end
 
   def bet(qty)

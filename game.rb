@@ -12,11 +12,12 @@ class Game
     bet = 10
     player_name
     @player.take_cards(cards_deck.pop(2))
-    @player.show_player_cards
     @player.bet(bet)
-    puts @player.wallet
-    @bank += bet
-    # @dealer.players_cards <<
+    @bank += 2 * bet
+    @dealer.take_cards(cards_deck.pop(2))
+    @dealer.bet(bet)
+    @player.player_info
+    @dealer.player_info
   end
 
   private
