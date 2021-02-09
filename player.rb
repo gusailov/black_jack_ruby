@@ -28,6 +28,17 @@ class Player
   end
 
   def points_sum
-    puts "Cards of #{name} : "
+    card_values = []
+    if @players_cards.any? { |card| card.rank == 'A' }
+      @players_cards.each do |card|
+        card_values << card.value
+      end
+      puts "AAAA #{card_values.sum}"
+    else
+      @players_cards.each do |card|
+        card_values << card.value
+      end
+      puts "FFF #{card_values.sum}"
+    end
   end
 end

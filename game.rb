@@ -17,7 +17,9 @@ class Game
     @dealer.take_cards(cards_deck.pop(2))
     @dealer.bet(bet)
     @player.player_info
+    @player.points_sum
     @dealer.player_info
+    @dealer.points_sum
   end
 
   private
