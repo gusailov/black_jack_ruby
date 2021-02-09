@@ -1,22 +1,33 @@
 class Game
-  attr_reader :cards_deck, :player
+  attr_reader :cards_deck, :player, :dealer
 
   def initialize
     @cards_deck = []
-    @suits = [SPADES, HEARTS, CLUBS, DIAMONDS]
-    seed
+    cards_deck_create
+    @dealer = Player.new('Dealer')
   end
 
-  def seed
+  def run
+    player_name
+    @player.take_cards(cards_deck.pop(2))
+    @player.show_players_cards
+
+    # @dealer.players_cards <<
+  end
+
+  private
+
+  def cards_deck_create
     ranked_cards = %w[J Q K]
-    @suits.each do |suit|
+    [SPADES, HEARTS, CLUBS, DIAMONDS].each do |suit|
       (2..10).each { |i| @cards_deck << Card.new(suit, i, i) }
       ranked_cards.each { |i| @cards_deck << Card.new(suit, i, 10) }
       @cards_deck << Card.new(suit, 'A', 1)
     end
+    @cards_deck = @cards_deck.shuffle
   end
 
-  def run
+  def player_name
     puts 'Enter Your Name'
     name = gets.chomp
     @player = Player.new(name)
