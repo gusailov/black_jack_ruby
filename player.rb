@@ -28,7 +28,7 @@ class Player
   end
 
   def points_sum
-    @points = if @card_values.any? { |value| value == 1 } && @card_values.sum < 21
+    @points = if @card_values.any? { |value| value == 1 } && @card_values.sum <= 11
                 @card_values.sum + 10
               else
                 @card_values.sum
