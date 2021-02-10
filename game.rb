@@ -9,20 +9,25 @@ class Game
   end
 
   def run
+    first_stage
+    puts 'Make Choice 1-Skip, 2-Add card, 3-Showdown'
+  end
+
+  private
+
+  def first_stage
     bet = 10
+    @bank += 2 * bet
     create_player
     @player.take_cards(cards_deck.pop(2))
     @player.bet(bet)
-    @bank += 2 * bet
     @dealer.take_cards(cards_deck.pop(2))
     @dealer.bet(bet)
-    @player.points_sum
-    @dealer.points_sum
     @player.player_info
     @dealer.player_info
   end
 
-  private
+  def second_stage; end
 
   def cards_deck_create
     ranked_cards = %w[J Q K]

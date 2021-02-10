@@ -20,6 +20,7 @@ class Player
   end
 
   def player_info
+    points_sum
     puts "Player: #{name}, cards: |#{show_player_cards}|, points: #{points}, wallet: #{wallet} "
   end
 
