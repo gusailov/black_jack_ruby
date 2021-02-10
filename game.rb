@@ -10,16 +10,16 @@ class Game
 
   def run
     bet = 10
-    player_name
+    create_player
     @player.take_cards(cards_deck.pop(2))
     @player.bet(bet)
     @bank += 2 * bet
     @dealer.take_cards(cards_deck.pop(2))
     @dealer.bet(bet)
-    @player.player_info
     @player.points_sum
-    @dealer.player_info
     @dealer.points_sum
+    @player.player_info
+    @dealer.player_info
   end
 
   private
@@ -34,7 +34,7 @@ class Game
     @cards_deck = @cards_deck.shuffle
   end
 
-  def player_name
+  def create_player
     puts 'Enter Your Name'
     name = gets.chomp
     @player = Player.new(name)
