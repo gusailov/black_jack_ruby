@@ -1,5 +1,5 @@
 class Player
-  attr_reader :name, :players_cards, :wallet, :points
+  attr_reader :name, :players_cards, :wallet, :points, :card_values
 
   def initialize(name)
     @name = name
@@ -30,13 +30,16 @@ class Player
 
   def points_sum
     @points = if @card_values.any? { |value| value == 1 } && @card_values.sum <= 11
-                @card_values.sum + 10
+                (@card_values.sum + 10)
               else
                 @card_values.sum
               end
   end
 
   def card_values_count
-    @players_cards.each { |card| @card_values << card.value }
+    @players_cards.each do |card|
+      @card_values << card.value
+      # unless @players_cards.include?(card)
+    end
   end
 end

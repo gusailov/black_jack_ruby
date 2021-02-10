@@ -9,8 +9,21 @@ class Game
   end
 
   def run
+    create_player
     first_stage
-    puts 'Make Choice 1-Skip, 2-Add card, 3-Showdown'
+    puts 'Make Choice: 1-Skip, 2-Add card, 3-Showdown'
+    command = ''
+    while command != 0
+      command = gets.to_i
+      case command
+      when 1 then skip_stage
+      when 2 then add_card
+      when 3 then showdown
+      when 0 then break
+      else
+        puts 'Команда введена не правильно'
+      end
+    end
   end
 
   private
@@ -18,7 +31,6 @@ class Game
   def first_stage
     bet = 10
     @bank += 2 * bet
-    create_player
     @player.take_cards(cards_deck.pop(2))
     @player.bet(bet)
     @dealer.take_cards(cards_deck.pop(2))
@@ -27,7 +39,22 @@ class Game
     @dealer.player_info
   end
 
-  def second_stage; end
+  def skip_stage
+    if @dealer.points <= 17
+      @dealer.take_cards(cards_deck.pop(1))
+      @dealer.player_info
+    end
+    puts 'Your turn: 2-Add card, 3-Showdown'
+  end
+
+  def add_card
+    @player.take_cards(cards_deck.pop(1))
+    @player.player_info
+  end
+
+  def showdown
+    puts 'Showdown'
+  end
 
   def cards_deck_create
     ranked_cards = %w[J Q K]
