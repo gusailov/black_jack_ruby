@@ -1,5 +1,5 @@
 class Game
-  attr_reader :cards_deck, :players, :bank
+  attr_reader :cards_deck, :players, :bank, :player, :dealer
 
   def initialize
     @cards_deck = []
@@ -36,51 +36,38 @@ class Game
       player.bet(bet)
       player.player_info
     end
-    # @player.take_cards(cards_deck.pop(2))
-    # @player.bet(bet)
-    # @dealer.take_cards(cards_deck.pop(2))
-    # @dealer.bet(bet)
-    # @player.player_info
-    # @dealer.player_info
   end
 
   def skip_stage
-    if @dealer.points <= 17
-      @dealer.take_cards(cards_deck.pop(1))
-      @dealer.player_info
-    end
+    @dealer.take_cards(cards_deck.pop(1)) if @dealer.points <= 17
     puts 'Your turn: 2-Add card, 3-Showdown'
+    @players.each(&:showdown)
+    @dealer.player_info
   end
 
   def add_card
     @player.take_cards(cards_deck.pop(1))
-    @player.player_info
+
     game_result
   end
 
   def showdown
     puts 'Showdown'
-    @players.each(&:showdown)
-    @players.each(&:player_info)
-    # @player.player_info
-    # @dealer.player_info
+
     game_result
   end
 
   def game_result
-    winner = @players.max { |a, b| a.points <=> b.points }
-    puts
-    # @players.each do |player|
-    #   if player.points > 21 || (player.points < @dealer.points)
-    #     winner = player
-    #     puts 'WINERR IS @dealer'
-    #   else
-    #     winner = player
-    #     puts 'WINERR IS @player'
-    #   end
-    # end
-
+    puts 'DRAW, no one wins' if @player.points == @dealer.points
+    winner = if @player.points > 21 || (@player.points < @dealer.points)
+               @dealer
+             else
+               @player
+             end
     winner.wallet += bank
+    @players.each(&:showdown)
+    @players.each(&:player_info)
+
     puts 'WINNERR IS:'
     winner.player_info
   end
@@ -97,7 +84,9 @@ class Game
 
   def create_players
     puts 'Enter Your Name'
-    name = gets.chomp
-    @players.concat([Player.new(name), Player.new('Dealer')])
+    name = gets.chomp.to_s
+    @player = Player.new(name)
+    @dealer = Player.new('Dealer')
+    @players = [@player, @dealer]
   end
 end
