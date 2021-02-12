@@ -6,7 +6,7 @@ class Player
     @name = name
     @wallet = 100
     @players_cards = {}
-    @showdown = false
+    @showdown = true
   end
 
   def take_cards(cards)
@@ -15,7 +15,7 @@ class Player
   end
 
   def player_info
-    if name == 'Dealer' && !@showdown
+    if !@showdown
       puts "Dealer, cards: **, points: **, wallet: #{wallet} "
     else
       puts "#{name}, cards: |#{players_cards.keys.join('|')}|, points: #{points}, wallet: #{wallet} "
@@ -26,7 +26,7 @@ class Player
     @wallet -= qty
   end
 
-  def showdown
+  def showdown?
     @showdown = true
   end
 
