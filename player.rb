@@ -6,6 +6,7 @@ class Player
     @name = name
     @wallet = 100
     @players_cards = {}
+    @showdown = false
   end
 
   def take_cards(cards)
@@ -14,15 +15,19 @@ class Player
 
   def player_info
     points_sum
-    if name == 'Dealer'
-      puts "Player: Dealer, cards: **, points: **, wallet: #{wallet} "
+    if name == 'Dealer' && !@showdown
+      puts "Dealer, cards: **, points: **, wallet: #{wallet} "
     else
-      puts "Player: #{name}, cards: |#{players_cards.keys.join('|')}|, points: #{points}, wallet: #{wallet} "
+      puts "#{name}, cards: |#{players_cards.keys.join('|')}|, points: #{points}, wallet: #{wallet} "
     end
   end
 
   def bet(qty)
     @wallet -= qty
+  end
+
+  def showdown
+    @showdown = true
   end
 
   def points_sum

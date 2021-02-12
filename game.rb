@@ -60,23 +60,29 @@ class Game
 
   def showdown
     puts 'Showdown'
-    @player.player_info
-    @dealer.player_info
+    @players.each(&:showdown)
+    @players.each(&:player_info)
+    # @player.player_info
+    # @dealer.player_info
     game_result
   end
 
   def game_result
-    winer = ''
-    if @player.points > 21 || (@player.points < @dealer.points)
-      winer = @dealer
-      puts 'WINERR IS @dealer'
-    else
-      winer = @player
-      puts 'WINERR IS @player'
-    end
-    winer.wallet += bank
-    puts 'WINERR IS:'
-    winer.player_info
+    winner = @players.max { |a, b| a.points <=> b.points }
+    puts
+    # @players.each do |player|
+    #   if player.points > 21 || (player.points < @dealer.points)
+    #     winner = player
+    #     puts 'WINERR IS @dealer'
+    #   else
+    #     winner = player
+    #     puts 'WINERR IS @player'
+    #   end
+    # end
+
+    winner.wallet += bank
+    puts 'WINNERR IS:'
+    winner.player_info
   end
 
   def cards_deck_create
