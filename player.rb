@@ -1,9 +1,13 @@
 class Player
+  # include Validation
   attr_reader :name, :players_cards, :points
-  attr_accessor :wallet
+  attr_accessor :wallet, :showdown
+
+  # validate(:name, presence: true)
 
   def initialize(name)
     @name = name
+    # validate!
     @wallet = 100
     @players_cards = {}
     @showdown = true
@@ -15,10 +19,10 @@ class Player
   end
 
   def player_info
-    if !@showdown
-      puts "Dealer, cards: **, points: **, wallet: #{wallet} "
-    else
+    if @showdown
       puts "#{name}, cards: |#{players_cards.keys.join('|')}|, points: #{points}, wallet: #{wallet} "
+    else
+      puts "Dealer, cards: **, points: **, wallet: #{wallet} "
     end
   end
 
@@ -26,9 +30,11 @@ class Player
     @wallet -= qty
   end
 
-  def showdown?
-    @showdown = true
+  def clear
+    @players_cards = {}
   end
+
+  private
 
   def points_sum
     @points = if players_cards.values.any? { |value| value == 1 } && players_cards.values.sum <= 11
@@ -36,10 +42,5 @@ class Player
               else
                 players_cards.values.sum
               end
-  end
-
-  def clear
-    @players_cards = {}
-    @showdown = false
   end
 end

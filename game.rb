@@ -1,6 +1,11 @@
 class Game
   attr_reader :cards_deck, :players, :bank, :player, :dealer
 
+  SPADES = "\u2660".freeze
+  HEARTS = "\u2665".freeze
+  CLUBS = "\u2663".freeze
+  DIAMONDS = "\u2666".freeze
+
   def initialize
     @cards_deck = []
     cards_deck_create
@@ -18,9 +23,8 @@ class Game
       when 1
         skip_stage
         puts 'Your turn: 2-Add card, 3-Showdown'
-
       when 2 then add_card
-      when 3 then showdown
+      when 3 then game_result
       when 4 then first_stage
       when 0 then break
       else
@@ -40,31 +44,23 @@ class Game
       player.player_info
     end
     puts 'Make Choice: 1-Skip, 2-Add card, 3-Showdown'
-    @players.each(&:showdown) # ubrat'
   end
 
   def skip_stage
-    puts 'skip_stage'
-    @dealer.take_cards(cards_deck.pop(1)) if @dealer.points <= 17 && @dealer.players_cards.values.count < 3
-    @players.each(&:showdown)
-    @dealer.player_info
+    if @dealer.points <= 17 && @dealer.players_cards.values.count < 3
+      @dealer.take_cards(cards_deck.pop(1))
+    end
   end
 
   def add_card
-    puts 'add_card'
     @player.take_cards(cards_deck.pop(1))
     skip_stage
     game_result
   end
 
-  def showdown
-    puts 'Showdown'
-    game_result
-  end
-
   def game_result
+    @dealer.showdown = true
     filtered_players = @players.select { |p| p.points <= 21 }
-    puts filtered_players
     if @player.points == @dealer.points || filtered_players.empty?
       puts 'DRAW, no one wins'
       @players.each { |player| player.wallet += (bank / 2) }
@@ -80,13 +76,13 @@ class Game
     @players.each(&:clear)
     cards_deck_create
     @bank = 0
+    @dealer.showdown = false
     puts 'new game - 4, stop - 0'
   end
 
   def show_winner(winner)
     @players.each(&:player_info)
     winner.wallet += bank
-    @players.each(&:showdown)
     puts 'WINNERR IS:'
     winner.player_info
   end
@@ -102,10 +98,14 @@ class Game
   end
 
   def create_players
-    puts 'Enter Your Name'
-    name = gets.chomp.to_s
-    @player = Player.new(name)
-    @dealer = Player.new('Dealer')
-    @players = [@player, @dealer]
+    name = ''
+    while name !~ /^\S+$/
+      puts 'Enter Your Name'
+      name = gets.chomp.to_s
+      @player = Player.new(name)
+      @dealer = Player.new('Dealer')
+      @dealer.showdown = false
+      @players = [@player, @dealer]
+    end
   end
 end

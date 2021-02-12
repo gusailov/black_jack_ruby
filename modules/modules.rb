@@ -1,5 +1,0 @@
-require_relative 'company_name'
-require_relative 'instance_counter'
-require_relative 'random_number'
-require_relative 'acсessors'
-require_relative 'validation'
