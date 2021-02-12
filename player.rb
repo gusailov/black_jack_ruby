@@ -11,10 +11,10 @@ class Player
 
   def take_cards(cards)
     cards.each { |card| @players_cards[card.name] = card.value }
+    points_sum
   end
 
   def player_info
-    points_sum
     if name == 'Dealer' && !@showdown
       puts "Dealer, cards: **, points: **, wallet: #{wallet} "
     else
@@ -36,5 +36,10 @@ class Player
               else
                 players_cards.values.sum
               end
+  end
+
+  def clear
+    @players_cards = {}
+    @showdown = false
   end
 end

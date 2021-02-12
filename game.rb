@@ -11,7 +11,6 @@ class Game
 
   def run
     first_stage
-    puts 'Make Choice: 1-Skip, 2-Add card, 3-Showdown'
     command = ''
     while command != 0
       command = gets.to_i
@@ -19,6 +18,7 @@ class Game
       when 1 then skip_stage
       when 2 then add_card
       when 3 then showdown
+      when 4 then first_stage
       when 0 then break
       else
         puts 'Команда введена не правильно'
@@ -36,30 +36,36 @@ class Game
       player.bet(bet)
       player.player_info
     end
+    puts 'Make Choice: 1-Skip, 2-Add card, 3-Showdown'
+    @players.each(&:showdown) # ubrat'
   end
 
   def skip_stage
     @dealer.take_cards(cards_deck.pop(1)) if @dealer.points <= 17
     puts 'Your turn: 2-Add card, 3-Showdown'
-    @players.each(&:showdown)
-    @dealer.player_info
+    # @players.each(&:showdown)
+    # @dealer.player_info
+    @players.each(&:player_info)
   end
 
   def add_card
     @player.take_cards(cards_deck.pop(1))
-
+    skip_stage
+    @players.each(&:player_info)
     game_result
   end
 
   def showdown
     puts 'Showdown'
-
+    @players.each(&:player_info)
     game_result
   end
 
   def game_result
     puts 'DRAW, no one wins' if @player.points == @dealer.points
-    winner = if @player.points > 21 || (@player.points < @dealer.points)
+    puts 'Player info before'
+    @players.each(&:player_info)
+    winner = if @player.points > 21 || (@player.points < @dealer.points && @dealer.points < 21)
                @dealer
              else
                @player
@@ -70,6 +76,10 @@ class Game
 
     puts 'WINNERR IS:'
     winner.player_info
+    @players.each(&:clear)
+    cards_deck_create
+    @bank = 0
+    puts 'new game - 4, stop - 0'
   end
 
   def cards_deck_create
