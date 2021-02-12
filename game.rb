@@ -1,15 +1,15 @@
 class Game
-  attr_reader :cards_deck, :player, :dealer, :bank
+  attr_reader :cards_deck, :players, :bank
 
   def initialize
     @cards_deck = []
     cards_deck_create
-    @dealer = Player.new('Dealer')
+    @players = []
+    create_players
     @bank = 0
   end
 
   def run
-    create_player
     first_stage
     puts 'Make Choice: 1-Skip, 2-Add card, 3-Showdown'
     command = ''
@@ -31,12 +31,17 @@ class Game
   def first_stage
     bet = 10
     @bank += 2 * bet
-    @player.take_cards(cards_deck.pop(2))
-    @player.bet(bet)
-    @dealer.take_cards(cards_deck.pop(2))
-    @dealer.bet(bet)
-    @player.player_info
-    @dealer.player_info
+    @players.each do |player|
+      player.take_cards(cards_deck.pop(2))
+      player.bet(bet)
+      player.player_info
+    end
+    # @player.take_cards(cards_deck.pop(2))
+    # @player.bet(bet)
+    # @dealer.take_cards(cards_deck.pop(2))
+    # @dealer.bet(bet)
+    # @player.player_info
+    # @dealer.player_info
   end
 
   def skip_stage
@@ -50,10 +55,28 @@ class Game
   def add_card
     @player.take_cards(cards_deck.pop(1))
     @player.player_info
+    game_result
   end
 
   def showdown
     puts 'Showdown'
+    @player.player_info
+    @dealer.player_info
+    game_result
+  end
+
+  def game_result
+    winer = ''
+    if @player.points > 21 || (@player.points < @dealer.points)
+      winer = @dealer
+      puts 'WINERR IS @dealer'
+    else
+      winer = @player
+      puts 'WINERR IS @player'
+    end
+    winer.wallet += bank
+    puts 'WINERR IS:'
+    winer.player_info
   end
 
   def cards_deck_create
@@ -66,9 +89,9 @@ class Game
     @cards_deck = @cards_deck.shuffle
   end
 
-  def create_player
+  def create_players
     puts 'Enter Your Name'
     name = gets.chomp
-    @player = Player.new(name)
+    @players.concat([Player.new(name), Player.new('Dealer')])
   end
 end

@@ -1,5 +1,6 @@
 class Player
-  attr_reader :name, :players_cards, :wallet, :points
+  attr_reader :name, :players_cards, :points
+  attr_accessor :wallet
 
   def initialize(name)
     @name = name
@@ -13,7 +14,11 @@ class Player
 
   def player_info
     points_sum
-    puts "Player: #{name}, cards: |#{players_cards.keys.join('|')}|, points: #{points}, wallet: #{wallet} "
+    if name == 'Dealer'
+      puts "Player: Dealer, cards: **, points: **, wallet: #{wallet} "
+    else
+      puts "Player: #{name}, cards: |#{players_cards.keys.join('|')}|, points: #{points}, wallet: #{wallet} "
+    end
   end
 
   def bet(qty)

@@ -12,3 +12,7 @@ SPADES = "\u2660".freeze
 HEARTS = "\u2665".freeze
 CLUBS = "\u2663".freeze
 DIAMONDS = "\u2666".freeze
+
+g = Game.new
+
+g.run
