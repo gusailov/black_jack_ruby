@@ -16,19 +16,19 @@ class Game
 
   def run
     first_stage
-    command = ''
-    while command != 0
-      command = gets.to_i
-      case command
+    puts 'Make Choice: 1-Skip, 2-Add card, 3-Showdown'
+    @command = ''
+    while @command != 0
+      @command = gets.to_i
+      case @command
       when 1
         skip_stage
         puts 'Your turn: 2-Add card, 3-Showdown'
       when 2 then add_card
       when 3 then game_result
-      when 4 then first_stage
       when 0 then break
       else
-        puts 'Команда введена не правильно'
+        puts 'Invalid command'
       end
     end
   end
@@ -43,13 +43,12 @@ class Game
       player.bet(bet)
       player.player_info
     end
-    puts 'Make Choice: 1-Skip, 2-Add card, 3-Showdown'
   end
 
   def skip_stage
-    if @dealer.points <= 17 && @dealer.players_cards.values.count < 3
-      @dealer.take_cards(cards_deck.pop(1))
-    end
+    return unless @dealer.points <= 17 && @dealer.players_cards.values.count < 3
+
+    @dealer.take_cards(cards_deck.pop(1))
   end
 
   def add_card
@@ -69,6 +68,7 @@ class Game
       winner = filtered_players.each.max { |a, b| a.points <=> b.points }
       show_winner(winner)
     end
+    @command = 0
     renew
   end
 
@@ -77,7 +77,19 @@ class Game
     cards_deck_create
     @bank = 0
     @dealer.showdown = false
-    puts 'new game - 4, stop - 0'
+    command = ''
+    while command != 0
+      puts 'NEW GAME- 1, STOP - 0'
+      command = gets.to_i
+      case command
+      when 1
+        run
+        break
+      when 0 then break
+      else
+        puts 'Invalid command'
+      end
+    end
   end
 
   def show_winner(winner)
