@@ -15,22 +15,9 @@ class Game
   end
 
   def run
-    first_stage
-    puts 'Make Choice: 1-Skip, 2-Add card, 3-Showdown'
     @command = ''
-    while @command != 0
-      @command = gets.to_i
-      case @command
-      when 1
-        skip_stage
-        puts 'Your turn: 2-Add card, 3-Showdown'
-      when 2 then add_card
-      when 3 then game_result
-      when 0 then break
-      else
-        puts 'Invalid command'
-      end
-    end
+    first_stage
+    main_game_flow
   end
 
   private
@@ -57,26 +44,46 @@ class Game
     game_result
   end
 
+  def main_game_flow
+    puts 'Make Choice: 1-Skip, 2-Add card, 3-Showdown, 0-STOP'
+    while @command != 0
+      @command = gets.to_i
+      case @command
+      when 1
+        skip_stage
+        puts 'Your turn: 2-Add card, 3-Showdown'
+      when 2 then add_card
+      when 3 then game_result
+      when 0 then break
+      else puts 'Invalid command'
+      end
+    end
+  end
+
   def game_result
     @dealer.showdown = true
+    @players.each(&:player_info)
     filtered_players = @players.select { |p| p.points <= 21 }
     if @player.points == @dealer.points || filtered_players.empty?
-      puts 'DRAW, no one wins'
       @players.each { |player| player.wallet += (bank / 2) }
-      @players.each(&:player_info)
+      puts 'DRAW, no one wins'
     else
       winner = filtered_players.each.max { |a, b| a.points <=> b.points }
       show_winner(winner)
     end
-    @command = 0
+    cleaning
     renew
   end
 
-  def renew
+  def cleaning
+    @command = 0
     @players.each(&:clear)
     cards_deck_create
     @bank = 0
     @dealer.showdown = false
+  end
+
+  def renew
     command = ''
     while command != 0
       puts 'NEW GAME- 1, STOP - 0'
@@ -93,7 +100,6 @@ class Game
   end
 
   def show_winner(winner)
-    @players.each(&:player_info)
     winner.wallet += bank
     puts 'WINNERR IS:'
     winner.player_info
