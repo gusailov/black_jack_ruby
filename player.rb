@@ -1,10 +1,13 @@
 class Player
+  include Validation
   attr_reader :name, :players_cards, :points
   attr_accessor :wallet, :showdown
 
+  validate(:wallet, wallet: true)
+
   def initialize(name)
     @name = name
-    @wallet = 100
+    @wallet = 10
     @players_cards = {}
     @showdown = true
   end
@@ -23,6 +26,7 @@ class Player
   end
 
   def bet(qty)
+    validate!
     @wallet -= qty
   end
 
