@@ -7,7 +7,7 @@ class Player
 
   def initialize(name)
     @name = name
-    @wallet = 10
+    @wallet = 100
     @players_cards = {}
     @showdown = true
   end
