@@ -49,9 +49,12 @@ class Game
       when 1
         skip_stage
         puts 'Your turn: 2-Add card, 3-Showdown'
-      when 2 then add_card
-      when 3 then showdown
-      when 0 then break
+      when 2
+        add_card
+      when 3
+        showdown
+      when 0
+        break
       else puts 'Invalid command'
       end
     end
@@ -66,7 +69,8 @@ class Game
   end
 
   def game_result
-    if @player.points > 21 then show_winner(@dealer)
+    if @player.points > 21
+      show_winner(@dealer)
     elsif @player.points == @dealer.points
       @players.each { |player| player.wallet += (bank / 2) }
       puts 'DRAW, no one wins'
@@ -94,7 +98,8 @@ class Game
       when 1
         run
         break
-      when 0 then break
+      when 0
+        break
       else
         puts 'Invalid command'
       end
