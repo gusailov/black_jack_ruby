@@ -5,9 +5,11 @@ class Player
 
   validate(:wallet, wallet: true)
 
+  START_AMOUNT = 100
+
   def initialize(name)
     @name = name
-    @wallet = 100
+    @wallet = START_AMOUNT
     @players_cards = {}
     @showdown = true
   end

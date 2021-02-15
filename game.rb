@@ -2,6 +2,8 @@ class Game
   include CardsDeck
   attr_reader :cards_deck, :players, :bank, :player, :dealer
 
+  BET = 10
+
   def initialize
     @cards_deck = []
     cards_deck_create
@@ -19,11 +21,10 @@ class Game
   private
 
   def first_stage
-    bet = 10
-    @bank += 2 * bet
+    @bank += 2 * BET
     @players.each do |player|
       player.take_cards(cards_deck.pop(2))
-      player.bet(bet)
+      player.bet(BET)
       player.player_info
     end
   end
@@ -37,7 +38,7 @@ class Game
   def add_card
     @player.take_cards(cards_deck.pop(1))
     skip_stage
-    game_result
+    showdown
   end
 
   def main_game_flow
@@ -49,26 +50,31 @@ class Game
         skip_stage
         puts 'Your turn: 2-Add card, 3-Showdown'
       when 2 then add_card
-      when 3 then game_result
+      when 3 then showdown
       when 0 then break
       else puts 'Invalid command'
       end
     end
   end
 
-  def game_result
+  def showdown
     @dealer.showdown = true
     @players.each(&:player_info)
-    filtered_players = @players.select { |p| p.points <= 21 }
-    if @player.points == @dealer.points || filtered_players.empty?
+    game_result
+    cleaning
+    renew
+  end
+
+  def game_result
+    if @player.points > 21 then show_winner(@dealer)
+    elsif @player.points == @dealer.points
       @players.each { |player| player.wallet += (bank / 2) }
       puts 'DRAW, no one wins'
     else
+      filtered_players = @players.select { |p| p.points <= 21 }
       winner = filtered_players.each.max { |a, b| a.points <=> b.points }
       show_winner(winner)
     end
-    cleaning
-    renew
   end
 
   def cleaning
